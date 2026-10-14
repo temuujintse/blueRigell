@@ -25,7 +25,7 @@ export default function Footer() {
         <div>
           <h3>Ангилал</h3>
           {CATEGORIES.slice(0, 4).map((c) => (
-            <Link key={c.title} href="/#categories">{c.title}</Link>
+            <Link key={c.title} href="/products">{c.title}</Link>
           ))}
         </div>
 

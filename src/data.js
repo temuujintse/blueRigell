@@ -103,6 +103,5 @@ export const USE_CASES = [
 export const NAV_LINKS = [
   { label: "Нүүр", href: "/" },
   { label: "Бүтээгдэхүүн", href: "/products" },
-  { label: "Бидний тухай", href: "/#about" },
   { label: "Захиалга өгөх", href: "/order" },
 ];

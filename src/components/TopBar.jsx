@@ -1,5 +1,6 @@
 import { COMPANY, formatPhone } from "../data.js";
 import Link from "./Link.jsx";
+import { CartIcon, MailIcon, PhoneIcon } from "./Icons.jsx";
 
 export default function TopBar({ cartCount, onCartClick }) {
   const mainPhone = COMPANY.phones[0].number;
@@ -17,22 +18,22 @@ export default function TopBar({ cartCount, onCartClick }) {
       <div className="header-right">
         <div className="header-actions">
           <a className="action" href={`tel:${mainPhone}`}>
-            <div className="action-icon">☎</div>
+            <div className="action-icon"><PhoneIcon /></div>
             <small>Залгах</small>
           </a>
           <a className="action" href="#contact">
-            <div className="action-icon">✉</div>
+            <div className="action-icon"><MailIcon /></div>
             <small>Холбоо барих</small>
           </a>
           <button className="action" type="button" onClick={onCartClick}>
-            <div className="action-icon">🛒</div>
+            <div className="action-icon"><CartIcon /></div>
             <small>Сагс</small>
             <span className="count">{cartCount}</span>
           </button>
         </div>
 
         <a className="header-phone" href={`tel:${mainPhone}`}>
-          📞 <strong>{formatPhone(mainPhone)}</strong>
+          <PhoneIcon width={14} height={14} className="header-phone-icon" /> <strong>{formatPhone(mainPhone)}</strong>
           <span>{COMPANY.hours}</span>
         </a>
       </div>

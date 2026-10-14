@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { PRODUCTS } from "../data.js";
+import Link from "./Link.jsx";
 import SectionHeader from "./SectionHeader.jsx";
 
 export default function Products({ onAdd }) {
@@ -30,9 +31,9 @@ export default function Products({ onAdd }) {
                   {justAdded === p.id ? "✓ Нэмэгдлээ" : "🛒 Сагсанд нэмэх"}
                 </button>
               ) : (
-                <a className="btn btn-block" href="#order">
+                <Link className="btn btn-block" href="/order">
                   {p.linkLabel}
-                </a>
+                </Link>
               )}
             </div>
           </div>

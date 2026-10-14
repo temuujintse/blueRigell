@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { COMPANY, HERO_SLIDES, formatPhone } from "../data.js";
+import { HERO_SLIDES } from "../data.js";
+import Link from "./Link.jsx";
+import TopBar from "./TopBar.jsx";
 
 const INTERVAL = 5000;
 
@@ -7,7 +9,6 @@ export default function Hero({ cartCount, onCartClick }) {
   const [index, setIndex] = useState(0);
   const timer = useRef(null);
   const total = HERO_SLIDES.length;
-  const mainPhone = COMPANY.phones[0].number;
 
   const startTimer = useCallback(() => {
     clearInterval(timer.current);
@@ -34,38 +35,7 @@ export default function Hero({ cartCount, onCartClick }) {
       ))}
       <div className="hero-full-scrim" />
 
-      <div className="hero-topbar">
-        <a href="#top" className="logo logo-light">
-          <div className="logo-icon">🪵</div>
-          <div>
-            <h2>{COMPANY.name}</h2>
-            <span>{COMPANY.tagline}</span>
-          </div>
-        </a>
-
-        <div className="header-right">
-          <div className="header-actions">
-            <a className="action" href={`tel:${mainPhone}`}>
-              <div className="action-icon">☎</div>
-              <small>Залгах</small>
-            </a>
-            <a className="action" href="#contact">
-              <div className="action-icon">✉</div>
-              <small>Холбоо барих</small>
-            </a>
-            <button className="action" type="button" onClick={onCartClick}>
-              <div className="action-icon">🛒</div>
-              <small>Сагс</small>
-              <span className="count">{cartCount}</span>
-            </button>
-          </div>
-
-          <a className="header-phone" href={`tel:${mainPhone}`}>
-            📞 <strong>{formatPhone(mainPhone)}</strong>
-            <span>{COMPANY.hours}</span>
-          </a>
-        </div>
-      </div>
+      <TopBar cartCount={cartCount} onCartClick={onCartClick} />
 
       <div className="hero-full-content">
         <div className="tag">Цутгалтын хавтан</div>
@@ -79,8 +49,8 @@ export default function Hero({ cartCount, onCartClick }) {
           ээлтэй, 100–150 удаа дахин ашиглагдана.
         </p>
         <div className="hero-full-ctas">
-          <a className="btn btn-light" href="#products">Бүтээгдэхүүн үзэх</a>
-          <a className="btn-outline-light" href="#order">Захиалга өгөх</a>
+          <Link className="btn btn-light" href="/products">Бүтээгдэхүүн үзэх</Link>
+          <Link className="btn-outline-light" href="/order">Захиалга өгөх</Link>
         </div>
       </div>
 

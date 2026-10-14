@@ -152,6 +152,19 @@ img { max-width: 100%; }
 }
 .link-btn:hover { text-decoration: underline; }
 
+/* ---------- PAGE HEADER (дэд хуудас) ---------- */
+
+.page-header {
+  color: #fff;
+  background: linear-gradient(100deg, #0b1a12 0%, #0d3d22 55%, var(--dark-green) 100%);
+}
+.page-header .hero-topbar { position: relative; }
+.page-header-title { max-width: 1400px; margin: 0 auto; padding: 6px 5% 40px; }
+.page-header-title h1 { font-size: 34px; margin-top: 8px; }
+.breadcrumb { font-size: 13px; color: rgba(255,255,255,0.68); }
+.breadcrumb a { color: #bfe8cf; text-decoration: none; }
+.breadcrumb a:hover { text-decoration: underline; }
+
 /* ---------- LAYOUT ---------- */
 
 main { width: 90%; max-width: 1400px; margin: 25px auto; }
@@ -325,6 +338,8 @@ footer a:hover { color: var(--dark-green); }
 
 @media (max-width: 900px) {
   .hero-topbar { padding: 20px 4%; gap: 15px; }
+  .page-header-title { padding: 4px 4% 28px; }
+  .page-header-title h1 { font-size: 26px; }
   .logo { min-width: auto; }
   .logo span, .header-phone { display: none; }
   main { width: 94%; }

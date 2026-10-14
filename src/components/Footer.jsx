@@ -1,4 +1,5 @@
 import { CATEGORIES, COMPANY, NAV_LINKS, formatPhone } from "../data.js";
+import Link from "./Link.jsx";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -17,14 +18,14 @@ export default function Footer() {
         <div>
           <h3>Холбоос</h3>
           {NAV_LINKS.map((l) => (
-            <a key={l.href} href={l.href}>{l.label}</a>
+            <Link key={l.href} href={l.href}>{l.label}</Link>
           ))}
         </div>
 
         <div>
           <h3>Ангилал</h3>
           {CATEGORIES.slice(0, 4).map((c) => (
-            <a key={c.title} href="#categories">{c.title}</a>
+            <Link key={c.title} href="/#categories">{c.title}</Link>
           ))}
         </div>
 

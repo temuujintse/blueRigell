@@ -33,7 +33,7 @@ export const CATEGORIES = [
   { title: "Худаг, шугам", href: "#projects" },
   { title: "Усны байгууламж", href: "#projects" },
   { title: "Тавцан, тавиур", href: "#projects" },
-  { title: "Захиалгын хэмжээ", href: "#order" },
+  { title: "Захиалгын хэмжээ", href: "/order" },
 ].map((c) => ({ ...c, image: productImg }));
 
 // type "cart" -> сагсанд нэмэх товч, type "link" -> захиалгын хэсэг рүү холбоос
@@ -101,8 +101,8 @@ export const USE_CASES = [
 ];
 
 export const NAV_LINKS = [
-  { label: "Нүүр", href: "#top" },
-  { label: "Бүтээгдэхүүн", href: "#products" },
-  { label: "Бидний тухай", href: "#about" },
-  { label: "Захиалга өгөх", href: "#order" },
+  { label: "Нүүр", href: "/" },
+  { label: "Бүтээгдэхүүн", href: "/products" },
+  { label: "Бидний тухай", href: "/#about" },
+  { label: "Захиалга өгөх", href: "/order" },
 ];

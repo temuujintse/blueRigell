@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 // Жижиг client-side router (нэмэлт сан шаардлагагүй).
-// Хуудсууд: "/" (нүүр), "/products", "/order"
+// Хуудсууд: "/" (нүүр), "/products" (?q=хайлт), "/order"
 
 const listeners = new Set();
 
@@ -17,7 +17,9 @@ export function scrollToHash(hash) {
 export function navigate(to) {
   const url = new URL(to, window.location.origin);
   const same =
-    url.pathname === window.location.pathname && url.hash === window.location.hash;
+    url.pathname === window.location.pathname &&
+    url.search === window.location.search &&
+    url.hash === window.location.hash;
 
   if (same) {
     if (url.hash) scrollToHash(url.hash);
@@ -25,18 +27,20 @@ export function navigate(to) {
     return;
   }
 
-  window.history.pushState({}, "", url.pathname + url.hash);
+  window.history.pushState({}, "", url.pathname + url.search + url.hash);
   listeners.forEach((l) => l());
 }
 
 export function useLocation() {
   const [loc, setLoc] = useState(() => ({
     path: currentPath(),
+    search: window.location.search,
     hash: window.location.hash,
   }));
 
   useEffect(() => {
-    const update = () => setLoc({ path: currentPath(), hash: window.location.hash });
+    const update = () =>
+      setLoc({ path: currentPath(), search: window.location.search, hash: window.location.hash });
     listeners.add(update);
     window.addEventListener("popstate", update);
     return () => {

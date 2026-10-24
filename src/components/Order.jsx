@@ -1,108 +1,77 @@
-import { useEffect, useState } from "react";
-import { COMPANY, formatPhone } from "../data.js";
-import SectionHeader from "./SectionHeader.jsx";
+import { useState } from "react";
+import { COMPANY, PRODUCTS, formatPhone } from "../data.js";
+import { Icon } from "./Icons.jsx";
+import Link from "./Link.jsx";
+import QuoteModal from "./QuoteModal.jsx";
 
-const EMPTY = { name: "", phone: "", qty: "", message: "" };
-
-export default function Order({ cartSummary, onClearCart }) {
-  const [form, setForm] = useState(EMPTY);
-
-  // Сагсанд бараа нэмэгдэх бүрт "тоо хэмжээ" талбарыг автоматаар бөглөнө
-  useEffect(() => {
-    if (cartSummary) setForm((f) => ({ ...f, qty: cartSummary }));
-  }, [cartSummary]);
-
-  const update = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const name = form.name.trim();
-    const body = [
-      `Нэр: ${name}`,
-      `Утас: ${form.phone.trim()}`,
-      `Тоо хэмжээ / хэмжээ: ${form.qty.trim() || "-"}`,
-      `Нэмэлт мэдээлэл: ${form.message.trim() || "-"}`,
-    ].join("\n");
-
-    window.location.href =
-      `mailto:${COMPANY.email}` +
-      `?subject=${encodeURIComponent(`Захиалга - ${name}`)}` +
-      `&body=${encodeURIComponent(body)}`;
-  };
-
-  const handleClearCart = () => {
-    onClearCart();
-    setForm((f) => ({ ...f, qty: "" }));
-  };
+// "Үнийн санал авах" хуудас (ppm32.mn/quote.html шиг): бүтээгдэхүүн сонгоод дэлгэрэнгүй маягт руу орно
+export default function Order() {
+  const [general, setGeneral] = useState(null); // ерөнхий хүсэлтийн тэмдэглэл
+  const [notes, setNotes] = useState("");
 
   return (
-    <section className="section" id="order">
-      <SectionHeader title="Захиалга өгөх" />
-      <div className="layout layout-order">
+    <>
+      <section className="section">
+        <p className="lead lead-narrow">
+          Бүтээгдэхүүнээ сонгож, хэмжээ, тоо ширхэгээ оруулаад хүсэлт илгээнэ үү. Бид мэдээллийг
+          хүлээн авч, хамгийн оновчтой саналыг боловсруулан богино хугацаанд эргэн холбогдоно.
+        </p>
+
+        <div className="quote-grid">
+          {PRODUCTS.map((p) => (
+            <Link className="quote-card" href={`/products/${p.id}`} key={p.id}>
+              <div className="quote-media">
+                <img src={p.image} alt="" loading="lazy" />
+              </div>
+              <div className="quote-body">
+                <h3>{p.title}</h3>
+                <p>{p.desc}</p>
+                <span className="btn btn-sm">
+                  Үнийн санал <Icon name="arrowRight" size={14} strokeWidth={2.2} />
+                </span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="section layout layout-order">
         <div className="card card-padded">
-          <form onSubmit={handleSubmit}>
-            <div className="form-row-2">
-              <Field label="Нэр *" name="name" value={form.name} onChange={update} required />
-              <Field label="Утасны дугаар *" name="phone" type="tel" value={form.phone} onChange={update} required />
-            </div>
-
-            <Field
-              label="Захиалах тоо хэмжээ / хэмжээ"
-              name="qty"
-              value={form.qty}
-              onChange={update}
-              placeholder="Жишээ: 300×5×7см — 500 ширхэг"
-              extra={
-                cartSummary && (
-                  <button type="button" className="link-btn" onClick={handleClearCart}>
-                    Сагс цэвэрлэх
-                  </button>
-                )
-              }
-            />
-
+          <h3 className="card-title">Тохирох бүтээгдэхүүн олдсонгүй юу?</h3>
+          <p className="lead">Хэрэгцээгээ товч бичээд ерөнхий хүсэлт илгээгээрэй.</p>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              setGeneral([{ label: "Хүсэлт", value: notes.trim() }]);
+            }}
+          >
             <div className="field">
-              <label htmlFor="of-message">Нэмэлт мэдээлэл</label>
+              <label htmlFor="gq-notes">Таны хүсэлт *</label>
               <textarea
-                id="of-message"
-                name="message"
+                id="gq-notes"
                 rows={4}
-                value={form.message}
-                onChange={update}
-                placeholder="Хэрэгцээ, хүргэх хаяг, хугацаа..."
+                required
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                placeholder="Жишээ: 400×5×7 см хэмжээтэй 800 ширхэг, Хан-Уул дүүрэгт хүргүүлэх..."
               />
             </div>
-
-            <button className="btn btn-full" type="submit">Захиалга илгээх</button>
-            <p className="form-note">
-              Товч дарахад таны имэйл клиент нээгдэж,{" "}
-              <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a> хаяг руу мэдээлэл бэлэн
-              бичигдэнэ.
-            </p>
+            <button className="btn btn-full" type="submit">Хүсэлт илгээх</button>
           </form>
         </div>
 
         <div className="contact-list">
           {COMPANY.phones.map((p) => (
-            <ContactCard key={p.number} href={`tel:${p.number}`} title={formatPhone(p.number)} sub={p.label} icon="☎" />
+            <ContactCard key={p.number} href={`tel:${p.number}`} title={formatPhone(p.number)} sub={p.label} icon="phone" />
           ))}
-          <ContactCard href={`mailto:${COMPANY.email}`} title={COMPANY.email} sub="И-мэйл" icon="✉" />
+          <ContactCard href={`mailto:${COMPANY.email}`} title={COMPANY.email} sub="И-мэйл" icon="mail" />
         </div>
-      </div>
-    </section>
-  );
-}
+      </section>
 
-function Field({ label, name, type = "text", extra, ...rest }) {
-  const id = `of-${name}`;
-  return (
-    <div className="field">
-      <div className="field-label-row">
-        <label htmlFor={id}>{label}</label>
-        {extra}
-      </div>
-      <input id={id} name={name} type={type} {...rest} />
-    </div>
+      {general && (
+        <QuoteModal product="Ерөнхий хүсэлт" details={general} onClose={() => setGeneral(null)} />
+      )}
+    </>
   );
 }
 
@@ -113,7 +82,7 @@ function ContactCard({ href, title, sub, icon }) {
         <strong>{title}</strong>
         <span>{sub}</span>
       </span>
-      <span className="contact-icon">{icon}</span>
+      <span className="contact-icon"><Icon name={icon} size={20} /></span>
     </a>
   );
 }

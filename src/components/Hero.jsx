@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { HERO_SLIDES } from "../data.js";
+import { Icon } from "./Icons.jsx";
 import Link from "./Link.jsx";
-import TopBar from "./TopBar.jsx";
 
-const INTERVAL = 5000;
+const INTERVAL = 6000;
 
-export default function Hero({ cartCount, onCartClick }) {
+export default function Hero() {
   const [index, setIndex] = useState(0);
   const timer = useRef(null);
   const total = HERO_SLIDES.length;
@@ -27,54 +27,48 @@ export default function Hero({ cartCount, onCartClick }) {
   };
 
   return (
-    <header className="hero-full" id="hero">
-      {HERO_SLIDES.map((src, i) => (
-        <div key={src} className={`hero-slide-full${i === index ? " active" : ""}`}>
-          <img src={src} alt="" />
+    <section className="hero" id="hero" aria-roledescription="carousel">
+      {HERO_SLIDES.map((s, i) => (
+        <div key={s.image} className={`hero-slide${i === index ? " active" : ""}`} aria-hidden={i !== index}>
+          <img className="hero-img" src={s.image} alt="" />
+          <div className="hero-content">
+            <span className="tag">{s.tag}</span>
+            <h1>
+              {s.title}
+              <br />
+              <span>{s.accent}</span>
+            </h1>
+            <p>{s.text}</p>
+            <Link className="btn" href={s.cta.href} tabIndex={i === index ? 0 : -1}>
+              {s.cta.label} <Icon name="arrowRight" size={16} strokeWidth={2.2} />
+            </Link>
+          </div>
         </div>
       ))}
-      <div className="hero-full-scrim" />
-
-      <TopBar cartCount={cartCount} onCartClick={onCartClick} />
-
-      <div className="hero-full-content">
-        <div className="tag">Цутгалтын хавтан</div>
-        <h1>
-          Дахин боловсруулсан
-          <br />
-          <span>мод, ган мэт бат бэх</span>
-        </h1>
-        <p>
-          Хуучин модон хаягдлыг полимер бүрхүүлтэй хослуулсан Эко брусс — байгаль орчинд
-          ээлтэй, 100–150 удаа дахин ашиглагдана.
-        </p>
-        <div className="hero-full-ctas">
-          <Link className="btn btn-light" href="/products">Бүтээгдэхүүн үзэх</Link>
-          <Link className="btn-outline-light" href="/order">Захиалга өгөх</Link>
-        </div>
-      </div>
 
       {total > 1 && (
         <>
-          <button className="hero-arrow prev" type="button" aria-label="Өмнөх зураг" onClick={() => go(index - 1)}>
-            ‹
-          </button>
-          <button className="hero-arrow next" type="button" aria-label="Дараах зураг" onClick={() => go(index + 1)}>
-            ›
-          </button>
+          <div className="hero-arrows">
+            <button type="button" aria-label="Өмнөх" onClick={() => go(index - 1)}>
+              <Icon name="chevronLeft" size={18} strokeWidth={2.2} />
+            </button>
+            <button type="button" aria-label="Дараах" onClick={() => go(index + 1)}>
+              <Icon name="chevronRight" size={18} strokeWidth={2.2} />
+            </button>
+          </div>
           <div className="hero-dots">
-            {HERO_SLIDES.map((src, i) => (
+            {HERO_SLIDES.map((s, i) => (
               <button
-                key={src}
+                key={s.image}
                 type="button"
                 className={i === index ? "active" : ""}
-                aria-label={`${i + 1}-р зураг`}
+                aria-label={`${i + 1}-р слайд`}
                 onClick={() => go(i)}
               />
             ))}
           </div>
         </>
       )}
-    </header>
+    </section>
   );
 }

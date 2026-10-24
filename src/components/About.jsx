@@ -1,4 +1,5 @@
 import { USE_CASES } from "../data.js";
+import { Icon } from "./Icons.jsx";
 import SectionHeader from "./SectionHeader.jsx";
 
 export default function About() {
@@ -24,7 +25,7 @@ export default function About() {
           <ul className="use-cases">
             {USE_CASES.map((u) => (
               <li key={u.text}>
-                <span aria-hidden="true">{u.icon}</span> {u.text}
+                <Icon name={u.icon} size={20} /> {u.text}
               </li>
             ))}
           </ul>

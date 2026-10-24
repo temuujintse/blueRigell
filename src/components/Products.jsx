@@ -1,44 +1,56 @@
-import { useState } from "react";
 import { PRODUCTS } from "../data.js";
+import { Icon } from "./Icons.jsx";
 import Link from "./Link.jsx";
 import SectionHeader from "./SectionHeader.jsx";
 
-export default function Products({ onAdd }) {
-  const [justAdded, setJustAdded] = useState(null);
+const matches = (p, q) =>
+  `${p.title} ${p.desc}`.toLowerCase().includes(q.toLowerCase());
 
-  const handleAdd = (p) => {
-    onAdd(p.id, p.cartName);
-    setJustAdded(p.id);
-    setTimeout(() => setJustAdded((cur) => (cur === p.id ? null : cur)), 1200);
-  };
+export default function Products({
+  query = "",
+  title = "Бүтээгдэхүүн",
+  linkHref = "#product-detail",
+  linkLabel = "Дэлгэрэнгүй мэдээлэл",
+}) {
+  const q = query.trim();
+  const list = q ? PRODUCTS.filter((p) => matches(p, q)) : PRODUCTS;
 
   return (
     <section className="section" id="products">
-      <SectionHeader title="Бүтээгдэхүүн" linkHref="#product-detail" linkLabel="Дэлгэрэнгүй мэдээлэл →" />
-      <div className="products">
-        {PRODUCTS.map((p) => (
-          <div className="product" key={p.id}>
-            <div className="product-image">
-              <img src={p.image} alt={p.title} loading="lazy" />
-            </div>
-            <div className="product-info">
-              <h3>{p.title}</h3>
-              <p className="desc">{p.desc}</p>
-              <div className="price">{p.price}</div>
+      <SectionHeader title={title} linkHref={linkHref} linkLabel={linkLabel} />
 
-              {p.type === "cart" ? (
-                <button className="add-cart" type="button" onClick={() => handleAdd(p)}>
-                  {justAdded === p.id ? "✓ Нэмэгдлээ" : "🛒 Сагсанд нэмэх"}
-                </button>
-              ) : (
-                <Link className="btn btn-block" href="/order">
-                  {p.linkLabel}
-                </Link>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
+      {q && (
+        <p className="search-note">
+          “{q}” хайлтаар {list.length} бүтээгдэхүүн олдлоо.{" "}
+          <Link href="/products">Хайлт цэвэрлэх</Link>
+        </p>
+      )}
+
+      {list.length === 0 ? (
+        <div className="empty">
+          Тохирох бүтээгдэхүүн олдсонгүй. <Link href="/order">Ерөнхий хүсэлт илгээж</Link> лавлана уу.
+        </div>
+      ) : (
+        <div className="products">
+          {list.map((p) => (
+            <Link className="product" href={`/products/${p.id}`} key={p.id}>
+              <div className="product-image">
+                <img src={p.image} alt={p.title} loading="lazy" />
+              </div>
+              <div className="product-info">
+                <h3>{p.title}</h3>
+                <p className="desc">{p.desc}</p>
+                <div className="product-bottom">
+                  <div className="price">{p.price}</div>
+                  <span className="quote-btn">
+                    Үнийн санал <Icon name="arrowRight" size={14} strokeWidth={2.2} />
+                  </span>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
     </section>
   );
 }

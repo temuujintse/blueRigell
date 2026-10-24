@@ -1,16 +1,22 @@
 import Link from "./Link.jsx";
-import TopBar from "./TopBar.jsx";
 
-export default function PageHeader({ title, cartCount, onCartClick }) {
+// Дэд хуудасны гарчгийн зурвас (header-ийн доор)
+// crumbs: [{ label, href }] — нүүр ба одоогийн хуудасны хоорондох холбоосууд
+export default function PageHeader({ title, crumbs = [] }) {
   return (
-    <header className="page-header">
-      <TopBar cartCount={cartCount} onCartClick={onCartClick} />
-      <div className="page-header-title">
+    <div className="page-title">
+      <div className="container">
         <div className="breadcrumb">
-          <Link href="/">Нүүр</Link> <span>/</span> <span>{title}</span>
+          <Link href="/">Нүүр</Link>
+          {crumbs.map((c) => (
+            <span key={c.href}>
+              {" "}<span>/</span> <Link href={c.href}>{c.label}</Link>
+            </span>
+          ))}{" "}
+          <span>/</span> <span>{title}</span>
         </div>
         <h1>{title}</h1>
       </div>
-    </header>
+    </div>
   );
 }
